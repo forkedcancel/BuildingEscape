@@ -1,6 +1,8 @@
 cmake-build-debug/
 .idea/
 .DS_Store
+Content/StarterContent/Textures
+Content/StarterContent/HDRI
 # Visual Studio 2015 user specific files
 .vs/
 
