@@ -31,6 +31,9 @@ private:
     float OpenAngle = -90.f;
 
     UPROPERTY(EditAnywhere)
+    float TriggerMass = 50.f;
+
+    UPROPERTY(EditAnywhere)
     ATriggerVolume *PressurePlate;
 
     UPROPERTY(EditAnywhere)
@@ -38,11 +41,11 @@ private:
 
     float LastDoorOpenTime;
 
-    AActor *ActorThatOpens;
-
     AActor *owner;
 
     void OpenDoor() const;
 
     void CloseDoor() const;
+
+    float GetTotalMassOfActorsOnPlate();
 };
