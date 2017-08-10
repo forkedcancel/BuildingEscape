@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Components/InputComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -25,8 +27,26 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
-	void LogPlayerViewPoint() const;
+	FHitResult GetFirstPhysicsBodyInReach();
 
 private:
-    float REACH = 100.f;
+	float REACH = 100.f;
+
+    UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+    UInputComponent* InputComponent = nullptr;
+
+    FVector LineTraceEnd;
+
+    FVector PlayerViewPointLocation;
+
+	void Grab();
+
+	void Release();
+
+    void FindPhysicsHandleComponent();
+
+    void SetupInputComponent();
+
+    void UpdatePickingLocation();
 };
