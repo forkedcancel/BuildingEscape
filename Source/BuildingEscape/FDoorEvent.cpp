@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "OpenDoor.h"
+#include "FDoorEvent.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/PrimitiveComponent.h"
@@ -18,15 +18,10 @@ void UOpenDoor::BeginPlay() {
     Super::BeginPlay();
 
     Owner = GetOwner();
-    LastDoorOpenTime = GetWorld()->GetTimeSeconds();
 
     if (!PressurePlate) {
         UE_LOG(LogTemp, Error, TEXT("PressurePlate is not defined for %s!"), *Owner->GetName());
     }
-}
-
-void UOpenDoor::OpenDoor() const {
-    Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
 }
 
 
@@ -35,17 +30,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
     if (GetTotalMassOfActorsOnPlate() > TriggerMass) {
-        LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-        OpenDoor();
+        OnOpen.Broadcast();
+    } else {
+        OnClose.Broadcast();
     }
-
-    if (GetWorld()->GetTimeSeconds() > LastDoorOpenTime + DoorCloseDelay) {
-        CloseDoor();
-    }
-}
-
-void UOpenDoor::CloseDoor() const {
-    Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate() {
