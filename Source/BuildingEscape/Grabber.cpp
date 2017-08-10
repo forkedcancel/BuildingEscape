@@ -59,6 +59,7 @@ void UGrabber::Grab() {
 }
 
 void UGrabber::Release() {
+    if (!PhysicsHandle) { return; }
     // Release the physics handle
     PhysicsHandle->ReleaseComponent();
 }
@@ -104,6 +105,8 @@ FVector UGrabber::GetReachLineEnd() {
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+    if (!PhysicsHandle) { return; }
     if (PhysicsHandle->GrabbedComponent) {
         PhysicsHandle->SetTargetLocation(GetReachLineEnd());
     }

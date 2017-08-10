@@ -17,12 +17,16 @@ UOpenDoor::UOpenDoor() {
 void UOpenDoor::BeginPlay() {
     Super::BeginPlay();
 
-//    ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-    owner = GetOwner();
+    Owner = GetOwner();
+    LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+
+    if (!PressurePlate) {
+        UE_LOG(LogTemp, Error, TEXT("PressurePlate is not defined for %s!"), *Owner->GetName());
+    }
 }
 
 void UOpenDoor::OpenDoor() const {
-    owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+    Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
 }
 
 
@@ -41,12 +45,13 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 }
 
 void UOpenDoor::CloseDoor() const {
-    owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+    Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate() {
     float TotalMass = 0.f;
 
+    if (!PressurePlate) { return TotalMass; }
     TArray<AActor *> OverlappingActors;
     PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
